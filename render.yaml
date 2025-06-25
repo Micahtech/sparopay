@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: sparopay-web
+    env: node
+    rootDir: app
+    buildCommand: npx expo export:web
+    startCommand: npx serve web
+    plan: free
+    branch: main

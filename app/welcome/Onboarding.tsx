@@ -64,7 +64,6 @@ export default function OnboardingPage() {
       {/* Logo and Brand Name */}
       <View style={styles.brandRow}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.brandText}>Sparopay</Text>
       </View>
 
       {/* Slide Carousel */}
@@ -120,8 +119,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: 220,
+    height: 220,
   },
   brandText: {
     fontSize: 24,

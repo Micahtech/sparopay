@@ -17,7 +17,6 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.centerContent}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.text}>Sparopay</Text>
       </View>
     </View>
   );
