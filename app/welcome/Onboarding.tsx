@@ -9,7 +9,9 @@ import {
   ScrollView,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  SafeAreaView,
 } from 'react-native';
+import Video from 'react-native-video';  // Import react-native-video
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,24 +19,25 @@ const slides = [
   {
     key: '1',
     image: require('../assets/story.png'),
-    title: 'Welcome to Sparopay',
+    title: 'Welcome to SparoPay',
     text: 'Buy data, airtime, pay bills, deliver packages, and earn rewards in one powerful app.',
   },
   {
     key: '2',
-    image: require('../assets/biker.png'),
-    title: 'Top Up & Pay Bills Instantly',
+    image: require('../assets/bills.png'),
+    title: 'Top-Up & Pay Bills Instantly',
     text: 'Recharge airtime, buy data, fund betting accounts, and pay bills in seconds.',
   },
   {
     key: '3',
-    image: require('../assets/bikes.png'),
-    title: 'Deliver and Recieve Packages ',
-    text: 'Deliver items to your customers doorstep quickly, anytime, anywhere.',
+    image: require('../assets/biking.gif'),
+    title: 'Deliver and Receive Packages',
+    text: 'Deliver items to your customers’ doorstep quickly, anytime, anywhere.',
+
   },
   {
     key: '4',
-    image: require('../assets/biker.png'),
+    image: require('../assets/rewards.png'),
     title: 'Earn Rewards',
     text: 'Earn cashback when you buy services—saving while spending made easy!',
   },
@@ -49,7 +52,7 @@ export default function OnboardingPage() {
       const nextIndex = (activeIndex + 1) % slides.length;
       scrollRef.current?.scrollTo({ x: nextIndex * width, animated: true });
       setActiveIndex(nextIndex);
-    }, 3000);
+    }, 3500);
 
     return () => clearInterval(timer);
   }, [activeIndex]);
@@ -60,13 +63,13 @@ export default function OnboardingPage() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Logo and Brand Name */}
-      <View style={styles.brandRow}>
+    <SafeAreaView style={styles.container}>
+      {/* Logo */}
+      <View style={styles.logoContainer}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
       </View>
 
-      {/* Slide Carousel */}
+      {/* Carousel */}
       <ScrollView
         ref={scrollRef}
         horizontal
@@ -79,21 +82,39 @@ export default function OnboardingPage() {
       >
         {slides.map((slide) => (
           <View key={slide.key} style={[styles.slide, { width }]}>
-                        <Text style={styles.slideTitle}>{slide.title}</Text>
-            <Image source={slide.image} style={styles.slideImage} />
-            <Text style={styles.slideText}>{slide.text}</Text>
+            <Text style={styles.slideTitle}>
+  <Text style={styles.slideTitleHighlight}>
+    {slide.title.split(' ')[0]}{' '}
+  </Text>
+  {slide.title.split(' ').slice(1).join(' ')}
+</Text>  
+          <Text style={styles.slideText}>{slide.text}</Text>
+
+             {/* Display video if available */}
+            {slide.video && (
+              <Video
+                source={slide.video}
+                style={styles.video}
+                resizeMode="contain"
+                repeat={true}
+                muted={true}
+              />
+            )}
+
+            {/* Display image if no video */}
+            {!slide.video && <Image source={slide.image} style={styles.slideImage} />}
           </View>
         ))}
       </ScrollView>
 
-      {/* Slide Indicators */}
+      {/* Dots */}
       <View style={styles.dotsContainer}>
         {slides.map((_, idx) => (
           <View key={idx} style={[styles.dot, activeIndex === idx && styles.activeDot]} />
         ))}
       </View>
 
-      {/* Action Buttons */}
+      {/* Buttons */}
       <View style={styles.buttonsRow}>
         <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => alert('Login')}>
           <Text style={styles.buttonText}>Login</Text>
@@ -102,7 +123,7 @@ export default function OnboardingPage() {
           <Text style={[styles.buttonText, styles.registerButtonText]}>Register</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -111,49 +132,54 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  brandRow: {
-    flexDirection: 'row',
+  logoContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
-    marginBottom: 10,
+    marginTop: 5,
+    marginBottom: 5,
   },
   logo: {
-    width: 220,
-    height: 220,
-  },
-  brandText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#297628',
+    width: width * 0.5,
+    height: width * 0.5,
+    resizeMode: 'contain',
   },
   carousel: {
-    height: height * 0.40,
+    flexGrow: 0,
   },
   slide: {
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  slideImage: {
-    width: width * 1,
-    height: height * 0.29,
-    resizeMode: 'contain',
-    marginBottom: 1,
+    paddingHorizontal: 24,
+    paddingTop: 5,
+    marginTop: -15,
   },
   slideTitle: {
-    fontSize: 22,
-    fontWeight: '500',
-    color: '#444',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
     textAlign: 'center',
-    marginBottom: 5,
+    marginTop: 20,
+    marginBottom: 12,
+    fontFamily: 'Poppins-Regular',
+  },
+  slideTitleHighlight: {
+    color: '#007312',
   },
   slideText: {
     fontSize: 14,
     color: '#333',
     textAlign: 'center',
-    paddingHorizontal: 2,
-    paddingBottom: 5,
+    paddingHorizontal: 12,
+    marginBottom: 20,
+    fontFamily: 'Poppins-Regular',
+    fontWeight: '500',
+    lineHeight: 20,
+  },
+  slideImage: {
+    width: width * 0.8,
+    height: height * 0.3,
+    resizeMode: 'contain',
+    marginBottom: 20,
+    
   },
   dotsContainer: {
     flexDirection: 'row',
@@ -172,13 +198,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#007312',
   },
   buttonsRow: {
-    width: '80%',
-    alignSelf: 'center',
+    paddingHorizontal: 30,
+    marginTop: 10,
     marginBottom: 30,
   },
   button: {
     paddingVertical: 14,
-    borderRadius: 8,
+    borderRadius: 6,
     alignItems: 'center',
     marginVertical: 8,
   },
@@ -192,10 +218,20 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 15,
     color: '#fff',
+        fontFamily: 'Poppins-Regular',
+
+  },
+  
+  video: {
+    width: width * 0.8,
+    height: height * 0.3,
+    marginBottom: 20,
   },
   registerButtonText: {
     color: '#007312',
+        fontFamily: 'Poppins-Regular',
+
   },
 });
